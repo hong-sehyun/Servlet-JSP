@@ -7,16 +7,16 @@ import java.sql.Statement;
 
 import javax.servlet.jsp.JspWriter;
 
-public class JDBCConnectJSP {
-	private static String driver = "com.mysql.cj.jdbc.Driver";
-	private static String url = "jdbc:mysql://localhost:3306/musthave";
-	private static String id = "musthave";
+public class JDBCConnectH2 {
+	private static String driver = "org.h2.Driver";
+	private static String url = "jdbc:h2:tcp://localhost/~/telephone";
+	private static String id = "scott";
 	private static String pwd = "tiger";
 	
 	//생성자 추가
 	//아래 방법으로 생성자 추가 시 jsp파일에 호출시 비번을 다 적어줘야돼서 비번이 노출됨. 갤러리 115330 이미지 참고
-	public JDBCConnectJSP() {	}	
-	public JDBCConnectJSP(String driver, String url, String id, String pwd ) {
+	public JDBCConnectH2() {	}	
+	public JDBCConnectH2(String driver, String url, String id, String pwd ) {
 		this.driver = driver;
 		this.url = url;
 		this.id = id;
@@ -132,12 +132,12 @@ public class JDBCConnectJSP {
 	} 
 
 	public static void main(String[] args) throws Exception {
-		JDBCConnectJSP jdbcj = new JDBCConnectJSP();
-		Connection con = jdbcj.getConnection();
+		JDBCConnectH2 jdbch = new JDBCConnectH2();
+		Connection con = jdbch.getConnection();
 
 		
-		jdbcj.printMember(con);
-		jdbcj.printBoard(con);
+		jdbch.printMember(con);
+		jdbch.printBoard(con);
 
 		con.close();
 	}
