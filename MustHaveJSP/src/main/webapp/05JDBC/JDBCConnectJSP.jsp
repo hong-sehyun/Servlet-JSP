@@ -24,24 +24,24 @@ jdbcj.writeBoardTable(con, out);
 
 <%
 
-// String driver = application.getInitParameter("MySQLDriver");
-// String url = application.getInitParameter("MySQLUrl");
-// String id = application.getInitParameter("MySQLId");
-// String pwd = application.getInitParameter("MySQLPwd");
-// JDBCConnectJSP jdbcj1 = new JDBCConnectJSP(driver, url, id, pwd);
-// Connection con1 = jdbcj1.getConnection();
-// jdbcj1.writeMemberTable(con1, out);
-// jdbcj1.writeBoardTable(con1, out);
+String driver = application.getInitParameter("MySQLDriver");
+String url = application.getInitParameter("MySQLUrl");
+String id = application.getInitParameter("MySQLId");
+String pwd = application.getInitParameter("MySQLPwd");
+JDBCConnectJSP jdbcj1 = new JDBCConnectJSP(driver, url, id, pwd);
+Connection con1 = jdbcj1.getConnection();
+jdbcj1.writeMemberTable(con1, out);
+jdbcj1.writeBoardTable(con1, out);
 
 
-String driver = application.getInitParameter("H2Driver");
-String url = application.getInitParameter("H2Url");
-String id = application.getInitParameter("H2Id");
-String pwd = application.getInitParameter("H2Pwd");
-JDBCConnectJSP jdbch = new JDBCConnectJSP(driver, url, id, pwd);
-Connection con1 = jdbch.getConnection();
-jdbch.writeMemberTable(con1, out);
-jdbch.writeBoardTable(con1, out);
+// String driver = application.getInitParameter("H2Driver");
+// String url = application.getInitParameter("H2Url");
+// String id = application.getInitParameter("H2Id");
+// String pwd = application.getInitParameter("H2Pwd");
+// JDBCConnectJSP jdbch = new JDBCConnectJSP(driver, url, id, pwd);
+// Connection con1 = jdbch.getConnection();
+// jdbch.writeMemberTable(con1, out);
+// jdbch.writeBoardTable(con1, out);
 %>
 </body>
 </html>

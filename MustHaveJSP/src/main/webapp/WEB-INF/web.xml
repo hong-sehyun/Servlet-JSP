@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
-<!-- 	<context-param> -->
-<!-- 		<param-name>MySQLDriver</param-name> -->
-<!-- 		<param-value>com.mysql.cj.jdbc.Driver</param-value> -->
-<!-- 	</context-param>  -->
-<!-- 	<context-param> -->
-<!-- 		<param-name>MySQLUrl</param-name> -->
-<!-- 		<param-value>jdbc:mysql://localhost:3306/musthave</param-value> -->
-<!-- 	</context-param>  -->
-<!-- 	<context-param> -->
-<!-- 		<param-name>MySQLId</param-name> -->
-<!-- 		<param-value>musthave</param-value> -->
-<!-- 	</context-param>  -->
-<!-- 	<context-param> -->
-<!-- 		<param-name>MySQLPwd</param-name> -->
-<!-- 		<param-value>tiger</param-value> -->
-<!-- 	</context-param>  -->
-
 	<context-param>
-		<param-name>H2Driver</param-name>
-		<param-value>org.h2.Driver</param-value>
-	</context-param>
+		<param-name>MySQLDriver</param-name>
+		<param-value>com.mysql.cj.jdbc.Driver</param-value>
+	</context-param> 
 	<context-param>
-		<param-name>H2Url</param-name>
-		<param-value>jdbc:h2:tcp://localhost/~/telephone</param-value>
-	</context-param>
+		<param-name>MySQLUrl</param-name>
+		<param-value>jdbc:mysql://localhost:3306/musthave</param-value>
+	</context-param> 
 	<context-param>
-		<param-name>H2Id</param-name>
-		<param-value>scott</param-value>
-	</context-param>
+		<param-name>MySQLId</param-name>
+		<param-value>musthave</param-value>
+	</context-param> 
 	<context-param>
-		<param-name>H2Pwd</param-name>
+		<param-name>MySQLPwd</param-name>
 		<param-value>tiger</param-value>
-	</context-param>
+	</context-param> 
+
+<!-- 	<context-param> -->
+<!-- 		<param-name>H2Driver</param-name> -->
+<!-- 		<param-value>org.h2.Driver</param-value> -->
+<!-- 	</context-param> -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>H2Url</param-name> -->
+<!-- 		<param-value>jdbc:h2:tcp://localhost/~/telephone</param-value> -->
+<!-- 	</context-param> -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>H2Id</param-name> -->
+<!-- 		<param-value>scott</param-value> -->
+<!-- 	</context-param> -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>H2Pwd</param-name> -->
+<!-- 		<param-value>tiger</param-value> -->
+<!-- 	</context-param> -->
 	
 </web-app>
