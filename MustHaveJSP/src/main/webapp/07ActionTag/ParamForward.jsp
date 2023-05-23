@@ -14,8 +14,8 @@
 		<li>나이 : <jsp:getProperty property="age" name="person" /></li>
 		<li>본명 : <%= request.getParameter("param1") %></li>
 		<li>출생 : <%= request.getParameter("param2") %></li>
-		<li>특징 : <%= request.getParameter("param3") %></li>	
-		
+		<li>특징 : <%= request.getParameter("param3") %></li>			
 	</ul>
+
 </body>
 </html>
