@@ -45,7 +45,7 @@ public class BoardDAO extends JDBCConnect1 {
     // 검색 조건에 맞는 게시물 목록을 반환합니다.
     public List<BoardDTO> selectList(Map<String, Object> map) { 
         List<BoardDTO> bbs = new Vector<BoardDTO>();  // 결과(게시물 목록)를 담을 변수
-        Connection con = getConnection();
+        con = getConnection();
 
         String query = "SELECT * FROM board "; 
         if (map.get("searchWord") != null) {
@@ -84,7 +84,7 @@ public class BoardDAO extends JDBCConnect1 {
     // 검색 조건에 맞는 게시물 목록을 반환합니다(페이징 기능 지원).
     public List<BoardDTO> selectListPage(Map<String, Object> map) {
         List<BoardDTO> bbs = new Vector<BoardDTO>();  // 결과(게시물 목록)를 담을 변수
-        
+        con = getConnection();
         // 쿼리문 템플릿  
         String query = " SELECT * FROM ( "
                      + "    SELECT Tb.*, ROWNUM rNum FROM ( "
@@ -137,13 +137,14 @@ public class BoardDAO extends JDBCConnect1 {
     // 게시글 데이터를 받아 DB에 추가합니다. 
     public int insertWrite(BoardDTO dto) {
         int result = 0;
+        Connection con = getConnection();
         
         try {
             // INSERT 쿼리문 작성 
             String query = "INSERT INTO board ( "
-                         + " num,title,content,id,visitcount) "
+                         + " title,content,id,visitcount) "
                          + " VALUES ( "
-                         + " seq_board_num.NEXTVAL, ?, ?, ?, 0)";  
+                         + " ?, ?, ?, 0)";  
 
       //      Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/musthave", "musthave", "tiger");
             psmt = con.prepareStatement(query);  // 동적 쿼리 
@@ -165,7 +166,7 @@ public class BoardDAO extends JDBCConnect1 {
     // 지정한 게시물을 찾아 내용을 반환합니다.
     public BoardDTO selectView(String num) { 
         BoardDTO dto = new BoardDTO();
-        
+        con = getConnection();
         // 쿼리문 준비
         String query = "SELECT B.*, M.name " 
                      + " FROM member M INNER JOIN board B " 
@@ -199,6 +200,7 @@ public class BoardDAO extends JDBCConnect1 {
 
     // 지정한 게시물의 조회수를 1 증가시킵니다.
     public void updateVisitCount(String num) { 
+    	con = getConnection();
         // 쿼리문 준비 
         String query = "UPDATE board SET "
                      + " visitcount=visitcount+1 "
@@ -208,7 +210,7 @@ public class BoardDAO extends JDBCConnect1 {
       //  	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/musthave", "musthave", "tiger");
             psmt = con.prepareStatement(query);
             psmt.setString(1, num);  // 인파라미터를 일련번호로 설정 
-            psmt.executeQuery();     // 쿼리 실행 
+            psmt.executeUpdate();     // 쿼리 실행 
         } 
         catch (Exception e) {
             System.out.println("게시물 조회수 증가 중 예외 발생");
@@ -219,7 +221,7 @@ public class BoardDAO extends JDBCConnect1 {
     // 지정한 게시물을 수정합니다.
     public int updateEdit(BoardDTO dto) { 
         int result = 0;
-        
+        con = getConnection();
         try {
             // 쿼리문 템플릿 
             String query = "UPDATE board SET "
@@ -247,7 +249,7 @@ public class BoardDAO extends JDBCConnect1 {
     // 지정한 게시물을 삭제합니다.
     public int deletePost(BoardDTO dto) { 
         int result = 0;
-
+        con = getConnection();
         try {
             // 쿼리문 템플릿
             String query = "DELETE FROM board WHERE num=?"; 
