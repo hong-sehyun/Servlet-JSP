@@ -7,12 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import common.JDBCConnect3;
+import javax.servlet.ServletContext;
 
-public class MemberDAO extends JDBCConnect3 {
-	
+import common.JDBCConnect1;
+
+public class MemberDAO extends JDBCConnect1 {
 	public MemberDAO() {}
 	
+	 public MemberDAO(ServletContext application) {
+	        super(application);
+	    }
+
+
+
 //	public JDBCConnect3 (String drv, String url, String id, String pwd) {
 //		this.drive = drive;
 //		this.url = url;
@@ -73,10 +80,10 @@ public class MemberDAO extends JDBCConnect3 {
 		
 		String query = "select * from member where id=? and pass=?";
 		
-		Connection con = getConnection();
+		con = getConnection();
 		if (con == null) return null;
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
+		psmt = null;
+		rs = null;
 		try {
 			psmt = con.prepareStatement(query);
 			psmt.setString(1, uid);

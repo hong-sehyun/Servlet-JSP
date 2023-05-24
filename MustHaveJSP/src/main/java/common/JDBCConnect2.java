@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.servlet.ServletContext;
+
 public class JDBCConnect2 {
 
 	public Connection con;
@@ -13,6 +15,7 @@ public class JDBCConnect2 {
 	public PreparedStatement psmt;
 	public ResultSet rs;
 	
+
 	public boolean  connectDB() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
