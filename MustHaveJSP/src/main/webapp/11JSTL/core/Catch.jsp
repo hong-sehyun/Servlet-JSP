@@ -21,11 +21,12 @@
 	
 	<c:catch var="eMessage">
 		<%
-		int result = num1/0;
+//		int result = num1 / 1;
+		int result = num1 / 0;
 		%>
 	</c:catch>
 	
-	<c:if test="${not empty eMessage }">
+	<c:if test="${ not empty eMessage }">
 	
 	예외 내용 : ${ eMessage }
 	</c:if>
