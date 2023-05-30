@@ -2,9 +2,6 @@ package common;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 import javax.servlet.ServletContext;
 
@@ -14,20 +11,12 @@ public class JDBCConnect3 {
 	private String id;
 	private String pwd;
 	
-	public Connection con;
-	public Statement st;
-	public PreparedStatement psmt;
-	public ResultSet rs;
-	
-
-	
 	public JDBCConnect3() {
 		driver = "com.mysql.cj.jdbc.Driver";
 		url = "jdbc:mysql://localhost:3306/musthave";
 		id = "musthave";
 		pwd = "tiger";
 	}
-
 
 	public JDBCConnect3(String driver, String url, String id, String pwd) {
 		this.driver = driver;
@@ -53,25 +42,4 @@ public class JDBCConnect3 {
 		}
 		return null;
 	}
-
-	/*
-	 * public void closeConnection(Connection con) { try { if (con != null)
-	 * con.close();
-	 * 
-	 * System.out.println("JDBC 자원 해제"); } catch (Exception e) {
-	 * e.printStackTrace(); } }
-	 */
-	public void close() {
-		try {
-			if (rs != null) rs.close();
-			if (st != null) st.close();
-			if (psmt != null) psmt.close();
-			if (con != null) con.close();
-			
-			System.out.println("JDBC 자원 해제");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 }
