@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 
-import common.JDBCConnect1;
+import common.JDBCConnect3;
 
-public class MemberDAO extends JDBCConnect1 {
+public class MemberDAO extends JDBCConnect3 {
 	public MemberDAO() {}
 	
 	 public MemberDAO(ServletContext application) {
@@ -80,10 +80,10 @@ public class MemberDAO extends JDBCConnect1 {
 		
 		String query = "select * from member where id=? and pass=?";
 		
-		con = getConnection();
+		Connection con = getConnection();
 		if (con == null) return null;
-		psmt = null;
-		rs = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
 		try {
 			psmt = con.prepareStatement(query);
 			psmt.setString(1, uid);

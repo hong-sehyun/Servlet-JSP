@@ -1,4 +1,4 @@
-package edu;
+package fileio;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import edu.domain.Member;
+import membership.MemberDTO;
 
 public class ObjectMain {
 
-	public void serialize(Member obj, String fileName) throws IOException {
+	public void serialize(MemberDTO obj, String fileName) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(fileName);
 				ObjectOutputStream oos = new ObjectOutputStream(fos);) {
 
@@ -18,12 +18,12 @@ public class ObjectMain {
 		}
 	}
 
-	public Member deserialize(String fileName) throws IOException, ClassNotFoundException {
-		Member m = null;
+	public MemberDTO deserialize(String fileName) throws IOException, ClassNotFoundException {
+		MemberDTO m = null;
 		try (FileInputStream fis = new FileInputStream(fileName);
 				ObjectInputStream ois = new ObjectInputStream(fis);) {
 
-			m = (Member)ois.readObject();
+			m = (MemberDTO)ois.readObject();
 		}		
 		return m;
 	}	
@@ -32,9 +32,9 @@ public class ObjectMain {
 		
 		ObjectMain om = new ObjectMain();
 
-		om.serialize(new Member(100, "홍길동", 1000), "testObject.dat");
+		om.serialize(new MemberDTO("dong", "1234", "홍길동","2023-05-31 18:01:50"), "testObject.dat");
 		
-		Member m = om.deserialize("testObject.dat");
+		MemberDTO m = om.deserialize("testObject.dat");
 		System.out.println(m);
 	}
 }

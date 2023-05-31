@@ -1,4 +1,4 @@
-package edu;
+package fileio;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

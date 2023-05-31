@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextMain {
+import membership.MemberDTO;
+
+public class TextMain2 {
 
 	void readData(String fname) throws Exception {
 		
@@ -32,7 +34,10 @@ public class TextMain {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		TextMain sm = new TextMain();
+		TextMain2 sm = new TextMain2();
+		
+		List<MemberDTO> list = ArrayList<>();
+		list.add(new MemberDTO("100", "1234", "홍이동", ))
 
 		sm.writeData("test.txt");
 		sm.readData("test.txt");
