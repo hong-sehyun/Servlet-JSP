@@ -159,6 +159,7 @@ public class MemberDAO extends JDBCConnect3 {
 		return ret;
 	}
 
+
 //	public int deletetMemberDTO(String uid) {
 //
 //	}

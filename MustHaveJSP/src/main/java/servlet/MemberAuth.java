@@ -53,11 +53,20 @@ public class MemberAuth extends HttpServlet {
 			else
 				req.setAttribute("authMessage", "귀하는 회원 아님");
 		}
-		req.getRequestDispatcher("/13Servlet/MemberAuth.jsp").forward(req, resp);
+		//view와 컨트롤러가 하나로 합쳐저 있기 때문에 바로 시행 가능 
+		//http://localhost:8080/MustHaveJSP/13Servlet/MemberAuth.jsp 호출 가능
+//		req.getRequestDispatcher("/13Servlet/MemberAuth.jsp").forward(req, resp);
+		
+		
+		//view와 컨트롤러가 하나로 합쳐저 있기 때문에 바로 시행 가능
+		//http://localhost:8080/MustHaveJSP/WEB-INF/View/MemberAuthView.jsp 이런식으로 치면 시행이 안됨
+		//요즘엔 이런 방식을 많이 씀
+		req.getRequestDispatcher("/WEB-INF/View/MemberAuthView.jsp").forward(req, resp);
+
 	}
 
 	@Override
 	public void destroy() {
-		dao.close();
+//		dao.close();
 	}
 }
