@@ -1,11 +1,16 @@
 package model2.mvcboard;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import common.DBConnPool;
 
-public class MVCBoardDAO extends DBConnPool {
+import common.JDBCConnect3;
+
+public class MVCBoardDAO extends JDBCConnect3 {
     public MVCBoardDAO() {
         super();
     }
@@ -13,13 +18,16 @@ public class MVCBoardDAO extends DBConnPool {
     // 검색 조건에 맞는 게시물의 개수를 반환합니다.
     public int selectCount(Map<String, Object> map) {
         int totalCount = 0;
+        Connection con = getConnection();
+        Statement stmt = null;
+		ResultSet rs = null;
         String query = "SELECT COUNT(*) FROM mvcboard";
         if (map.get("searchWord") != null) {
             query += " WHERE " + map.get("searchField") + " "
                    + " LIKE '%" + map.get("searchWord") + "%'";
         }
         try {
-            stmt = con.createStatement();
+        	stmt = con.createStatement();
             rs = stmt.executeQuery(query);
             rs.next();
             totalCount = rs.getInt(1);
@@ -35,26 +43,37 @@ public class MVCBoardDAO extends DBConnPool {
     // 검색 조건에 맞는 게시물 목록을 반환합니다(페이징 기능 지원).
     public List<MVCBoardDTO> selectListPage(Map<String,Object> map) {
         List<MVCBoardDTO> board = new Vector<MVCBoardDTO>();
-        String query = " "
-                     + "SELECT * FROM ( "
-                     + "    SELECT Tb.*, ROWNUM rNum FROM ( "
-                     + "        SELECT * FROM mvcboard ";
-
-        if (map.get("searchWord") != null)
-        {
-            query += " WHERE " + map.get("searchField")
-                   + " LIKE '%" + map.get("searchWord") + "%' ";
-        }
-
-        query += "        ORDER BY idx DESC "
-               + "    ) Tb "
-               + " ) "
-               + " WHERE rNum BETWEEN ? AND ?";
-
+		Connection con = getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+//        String query = " "
+//                     + "SELECT * FROM ( "
+//                     + "    SELECT Tb.*, ROWNUM rNum FROM ( "
+//                     + "        SELECT * FROM mvcboard ";
+//
+//        if (map.get("searchWord") != null)
+//        {
+//            query += " WHERE " + map.get("searchField")
+//                   + " LIKE '%" + map.get("searchWord") + "%' ";
+//        }
+//
+//        query += "        ORDER BY idx DESC "
+//               + "    ) Tb "
+//               + " ) "
+//               + " WHERE rNum BETWEEN ? AND ?";
+		
+		String query = "select * from mvcboard";
+		
+		if(map.get("searchWord") != null) {
+			query += "where" + map.get("searchField") + "like '%" + map.get("searchWord") + "%' ";
+		}
+		query += " ORDER BY idx desc limit ?,?";
         try {
             psmt = con.prepareStatement(query);
-            psmt.setString(1, map.get("start").toString());
-            psmt.setString(2, map.get("end").toString());
+            psmt.setInt(1, (int)map.get("start"));
+            psmt.setInt(2,(int)map.get("pageSize"));
+//            psmt.setString(2, map.get("end").toString());
+
             rs = psmt.executeQuery();
 
             while (rs.next()) {
@@ -70,6 +89,16 @@ public class MVCBoardDAO extends DBConnPool {
                 dto.setDowncount(rs.getInt(8));
                 dto.setPass(rs.getString(9));
                 dto.setVisitcount(rs.getInt(10));
+//                dto.setIdx(rs.getString("idx"));
+//                dto.setName(rs.getString("name"));
+//                dto.setTitle(rs.getString("title"));
+//                dto.setContent(rs.getString("content"));
+//                dto.setPostdate(rs.getDate("postdate"));
+//                dto.setOfile(rs.getString("ofile"));
+//                dto.setSfile(rs.getString("sfile"));
+//                dto.setDowncount(rs.getInt("downcount"));
+//                dto.setPass(rs.getString("pass"));
+//                dto.setVisitcount(rs.getInt("visitcount"));
 
                 board.add(dto);
             }
@@ -84,11 +113,13 @@ public class MVCBoardDAO extends DBConnPool {
     // 게시글 데이터를 받아 DB에 추가합니다(파일 업로드 지원).
     public int insertWrite(MVCBoardDTO dto) {
         int result = 0;
+        Connection con = getConnection();
+		PreparedStatement psmt = null;        
         try {
             String query = "INSERT INTO mvcboard ( "
-                         + " idx, name, title, content, ofile, sfile, pass) "
+                         + " name, title, content, ofile, sfile, pass) "
                          + " VALUES ( "
-                         + " seq_board_num.NEXTVAL,?,?,?,?,?,?)";
+                         + " ?,?,?,?,?,?)";
             psmt = con.prepareStatement(query);
             psmt.setString(1, dto.getName());
             psmt.setString(2, dto.getTitle());
@@ -108,6 +139,9 @@ public class MVCBoardDAO extends DBConnPool {
     // 주어진 일련번호에 해당하는 게시물을 DTO에 담아 반환합니다.
     public MVCBoardDTO selectView(String idx) {
         MVCBoardDTO dto = new MVCBoardDTO();  // DTO 객체 생성
+        Connection con = getConnection();
+		PreparedStatement psmt = null;   
+		ResultSet rs = null;
         String query = "SELECT * FROM mvcboard WHERE idx=?";  // 쿼리문 템플릿 준비
         try {
             psmt = con.prepareStatement(query);  // 쿼리문 준비
@@ -139,10 +173,12 @@ public class MVCBoardDAO extends DBConnPool {
         String query = "UPDATE mvcboard SET "
                      + " visitcount=visitcount+1 "
                      + " WHERE idx=?"; 
+        Connection con = getConnection();
+		PreparedStatement psmt = null;   
         try {
             psmt = con.prepareStatement(query);
             psmt.setString(1, idx);
-            psmt.executeQuery();
+            psmt.executeUpdate();
         }
         catch (Exception e) {
             System.out.println("게시물 조회수 증가 중 예외 발생");
@@ -155,6 +191,8 @@ public class MVCBoardDAO extends DBConnPool {
         String sql = "UPDATE mvcboard SET "
                 + " downcount=downcount+1 "
                 + " WHERE idx=? "; 
+        Connection con = getConnection();
+		PreparedStatement psmt = null;   
         try {
             psmt = con.prepareStatement(sql);
             psmt.setString(1, idx);
@@ -165,6 +203,9 @@ public class MVCBoardDAO extends DBConnPool {
     // 입력한 비밀번호가 지정한 일련번호의 게시물의 비밀번호와 일치하는지 확인합니다.
     public boolean confirmPassword(String pass, String idx) {
         boolean isCorr = true;
+        Connection con = getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
         try {
             String sql = "SELECT COUNT(*) FROM mvcboard WHERE pass=? AND idx=?";
             psmt = con.prepareStatement(sql);
@@ -186,6 +227,8 @@ public class MVCBoardDAO extends DBConnPool {
     // 지정한 일련번호의 게시물을 삭제합니다.
     public int deletePost(String idx) {
         int result = 0;
+        Connection con = getConnection();
+		PreparedStatement psmt = null;
         try {
             String query = "DELETE FROM mvcboard WHERE idx=?";
             psmt = con.prepareStatement(query);
@@ -202,6 +245,8 @@ public class MVCBoardDAO extends DBConnPool {
     // 게시글 데이터를 받아 DB에 저장되어 있던 내용을 갱신합니다(파일 업로드 지원).
     public int updatePost(MVCBoardDTO dto) {
         int result = 0;
+        Connection con = getConnection();
+		PreparedStatement psmt = null;
         try {
             // 쿼리문 템플릿 준비
             String query = "UPDATE mvcboard"

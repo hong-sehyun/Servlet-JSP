@@ -8,7 +8,7 @@ String num = request.getParameter("num");  // 일련번호 받기
 BoardDAO dao = new BoardDAO(application);  // DAO 생성 
 dao.updateVisitCount(num);                 // 조회수 증가 
 BoardDTO dto = dao.selectView(num);        // 게시물 가져오기 
-dao.close();                               // DB 연결 해제
+// dao.close();                               // DB 연결 해제
 %>
 <!DOCTYPE html>
 <html>

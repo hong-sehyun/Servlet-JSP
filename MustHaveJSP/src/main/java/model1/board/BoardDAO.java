@@ -2,15 +2,18 @@ package model1.board;
 
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.ServletContext;
 
-import common.JDBCConnect1;
+import common.JDBCConnect3;
 
-public class BoardDAO extends JDBCConnect1 {
+public class BoardDAO extends JDBCConnect3 {
 	
     public BoardDAO(ServletContext application) {
         super(application);
@@ -20,6 +23,8 @@ public class BoardDAO extends JDBCConnect1 {
     public int selectCount(Map<String, Object> map) {
         int totalCount = 0; // 결과(게시물 수)를 담을 변수
         Connection con = getConnection();
+        Statement stmt = null;
+		ResultSet rs = null;
         // 게시물 수를 얻어오는 쿼리문 작성
         String query = "SELECT COUNT(*) FROM board";
         if (map.get("searchWord") != null) {
@@ -45,7 +50,9 @@ public class BoardDAO extends JDBCConnect1 {
     // 검색 조건에 맞는 게시물 목록을 반환합니다.
     public List<BoardDTO> selectList(Map<String, Object> map) { 
         List<BoardDTO> bbs = new Vector<BoardDTO>();  // 결과(게시물 목록)를 담을 변수
-        con = getConnection();
+        Connection con = getConnection();
+        Statement stmt = null;
+		ResultSet rs = null;
 
         String query = "SELECT * FROM board "; 
         if (map.get("searchWord") != null) {
@@ -56,7 +63,7 @@ public class BoardDAO extends JDBCConnect1 {
 
         try {
       //  	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/musthave", "musthave", "tiger");
-            stmt = con.createStatement();   // 쿼리문 생성
+        	stmt = con.createStatement();   // 쿼리문 생성
             rs = stmt.executeQuery(query);  // 쿼리 실행
 
             while (rs.next()) {  // 결과를 순화하며...
@@ -84,29 +91,25 @@ public class BoardDAO extends JDBCConnect1 {
     // 검색 조건에 맞는 게시물 목록을 반환합니다(페이징 기능 지원).
     public List<BoardDTO> selectListPage(Map<String, Object> map) {
         List<BoardDTO> bbs = new Vector<BoardDTO>();  // 결과(게시물 목록)를 담을 변수
-        con = getConnection();
+        Connection con = getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
         // 쿼리문 템플릿  
-        String query = " SELECT * FROM ( "
-                     + "    SELECT Tb.*, ROWNUM rNum FROM ( "
-                     + "        SELECT * FROM board ";
+        String query = " SELECT * FROM board ";
 
         // 검색 조건 추가 
         if (map.get("searchWord") != null) {
-            query += " WHERE " + map.get("searchField")
-                   + " LIKE '%" + map.get("searchWord") + "%' ";
+            query += " WHERE " + map.get("searchField") + " LIKE '%" + map.get("searchWord") + "%' ";
         }
         
-        query += "      ORDER BY num DESC "
-               + "     ) Tb "
-               + " ) "
-               + " WHERE rNum BETWEEN ? AND ?"; 
+        query += " ORDER BY num DESC limit ?,?"; 
 
         try {
             // 쿼리문 완성 
       //  	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/musthave", "musthave", "tiger");
             psmt = con.prepareStatement(query);
-            psmt.setString(1, map.get("start").toString());
-            psmt.setString(2, map.get("end").toString());
+            psmt.setInt(1, (int)map.get("start"));
+            psmt.setInt(2, (int)map.get("pageSize"));
             
             // 쿼리문 실행 
             rs = psmt.executeQuery();
@@ -114,6 +117,7 @@ public class BoardDAO extends JDBCConnect1 {
             while (rs.next()) {
                 // 한 행(게시물 하나)의 데이터를 DTO에 저장
                 BoardDTO dto = new BoardDTO();
+                
                 dto.setNum(rs.getString("num"));
                 dto.setTitle(rs.getString("title"));
                 dto.setContent(rs.getString("content"));
@@ -138,7 +142,7 @@ public class BoardDAO extends JDBCConnect1 {
     public int insertWrite(BoardDTO dto) {
         int result = 0;
         Connection con = getConnection();
-        
+		PreparedStatement psmt = null;
         try {
             // INSERT 쿼리문 작성 
             String query = "INSERT INTO board ( "
@@ -166,7 +170,9 @@ public class BoardDAO extends JDBCConnect1 {
     // 지정한 게시물을 찾아 내용을 반환합니다.
     public BoardDTO selectView(String num) { 
         BoardDTO dto = new BoardDTO();
-        con = getConnection();
+        Connection con = getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
         // 쿼리문 준비
         String query = "SELECT B.*, M.name " 
                      + " FROM member M INNER JOIN board B " 
@@ -200,7 +206,8 @@ public class BoardDAO extends JDBCConnect1 {
 
     // 지정한 게시물의 조회수를 1 증가시킵니다.
     public void updateVisitCount(String num) { 
-    	con = getConnection();
+    	Connection con = getConnection();
+		PreparedStatement psmt = null;
         // 쿼리문 준비 
         String query = "UPDATE board SET "
                      + " visitcount=visitcount+1 "
@@ -221,7 +228,8 @@ public class BoardDAO extends JDBCConnect1 {
     // 지정한 게시물을 수정합니다.
     public int updateEdit(BoardDTO dto) { 
         int result = 0;
-        con = getConnection();
+        Connection con = getConnection();
+		PreparedStatement psmt = null;
         try {
             // 쿼리문 템플릿 
             String query = "UPDATE board SET "
@@ -249,7 +257,8 @@ public class BoardDAO extends JDBCConnect1 {
     // 지정한 게시물을 삭제합니다.
     public int deletePost(BoardDTO dto) { 
         int result = 0;
-        con = getConnection();
+        Connection con = getConnection();
+		PreparedStatement psmt = null;
         try {
             // 쿼리문 템플릿
             String query = "DELETE FROM board WHERE num=?"; 

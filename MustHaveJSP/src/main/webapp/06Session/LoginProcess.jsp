@@ -11,7 +11,7 @@ String userPwd = request.getParameter("user_pw");
 // 회원 테이블 DAO를 통해 회원 정보 DTO 획득
 MemberDAO dao = new MemberDAO(application);
 MemberDTO memberDTO = dao.getMemberDTO(userId, userPwd);
-dao.close();
+// dao.close();
 
 // 로그인 성공 여부에 따른 처리
 if (memberDTO.getId() != null) {

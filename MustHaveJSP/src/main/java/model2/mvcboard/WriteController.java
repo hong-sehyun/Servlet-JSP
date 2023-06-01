@@ -17,7 +17,9 @@ import fileupload.FileUtil;
 import utils.JSFunction;
 
 public class WriteController extends HttpServlet {
-    @Override
+    private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.getRequestDispatcher("/14MVCBoard/Write.jsp").forward(req, resp);
